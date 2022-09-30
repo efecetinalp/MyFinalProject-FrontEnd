@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { empty } from 'rxjs';
 import { Category } from 'src/app/models/category';
 import { CategoryService } from 'src/app/services/category.service';
 
@@ -26,5 +27,19 @@ export class CategoryComponent implements OnInit {
 
   setCurrentCategory(category: Category) {
     this.currentCategory = category;
+  }
+
+  getCurrentCategoryClass(category:Category){
+    if(category == this.currentCategory){
+      return "list-group-item active"
+    }
+    return "list-group-item"
+  }
+
+  getAllCategoryClass(){
+    if(!this.currentCategory){
+      return "list-group-item active"
+    }
+    return "list-group-item"
   }
 }
