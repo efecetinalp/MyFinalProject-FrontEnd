@@ -13,7 +13,7 @@ export class ProductAddComponent implements OnInit {
   productAddForm : FormGroup;
   constructor(private formBuilder:FormBuilder,
     private productService:ProductService,
-    private toasterService:ToastrService) { }
+    private toastrService:ToastrService) { }
 
   ngOnInit(): void {
     this.createProductAddForm();
@@ -31,11 +31,17 @@ export class ProductAddComponent implements OnInit {
   add(){
     if(this.productAddForm.valid){
       let productModel = Object.assign({},this.productAddForm.value)
-      this.productService.add(productModel).subscribe(data => {
-        this.toasterService.success("Product successfully added", "Product Added")
+      this.productService.add(productModel).subscribe((response) => {
+        this.toastrService.success(response.message, "Product Added")
+      }, (responseError)=>{
+        if(responseError.error.Errors.length > 0){
+          for (let i = 0; i < responseError.error.Errors.length; i++) {
+            this.toastrService.error(responseError.error.Errors[i].ErrorMessage, "Validation error")
+          }
+        }
       })
     }else{
-      this.toasterService.error("Please add all information", "Operation Failed")
+      this.toastrService.error("Please add all information", "Operation Failed")
     }
   }
 }
